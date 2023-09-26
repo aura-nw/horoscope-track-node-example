@@ -1,0 +1,65 @@
+specVersion: 1.0.0
+name: node-base
+version: 0.0.1
+# runner:
+#   node:
+#     name: ""
+#     version: "*"
+#   query:
+#     name: ""
+#     version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Aura Network)
+repository:
+schema:
+  file: ./prisma/schema.prisma
+
+network:
+  chainId: euphoria
+  endpoint: https://indexer-v2.dev.aurascan.io/api/v2/graphql
+  dictionary: ""
+dataSources:
+  - kind: aura/Horoscope
+    startBlock: 1407719 # first block on the fourth iteration of juno
+    mapping:
+      file: "./dist/main.js"
+      handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        - handler: handleBlocks
+          type: block
+          # filter:
+          #   startTime: 2024-08-12T08:20:06.661Z #(time | null) Filter from special block time.
+          #   # endTime: 2023-12-12T08:20:06.661Z #(time | null) Filter to special block time.
+          #   limit: 50 #(number | null) Index every 50 blocks: 0, 50, 100, 150, ...
+        - handler: handleTransactions
+          type: transaction
+          # filter:
+          #   includeFailedTx: true #(boolean | null) Include txs that were in a failed (false by default).
+        - handler: handleMessages
+          type: message
+          filter:
+            - type: "/cosmwasm.wasm.v1.MsgExecuteContract" 
+              contract: "aura1fgfnuru6krewgt9zzu7nzercz007928uzrw2t2tl6hl3ec50me2q3ankr2" 
+              contractCall: "execute_swap_operations" 
+            # - type: /cosmos.staking.v1beta1.MsgDelegate #(string | null) Filter message that has special type.
+          #     contractCall: burn #(string | null) The name of the contract function that was called.
+          #     values: # A set of key/value pairs that are present in the message data.
+          #       contract: aura1ja94g6rz045ly4t3khte92n24pr3cuyvs2rd5lgljnlnl0sp0wfqjg7gq2 #(string | null) The address of the contract was executed.
+          #       sender: aura1el26ynpghudec6rh8krnxpgxgzmjsr6lttp0fpl3r4nq9xyvg2rsn2e9f1 #(string | null) The address of the sender.
+          #   - type: /cosmwasm.wasm.v1.MsgExecuteContract #(string | null) Filter message that has special type.
+          #     contractCall: mint #(string | null) The name of the contract function that was called.
+          #     values: # A set of key/value pairs that are present in the message data.
+          #       contract: aura1el26ynpghudec6rh8krnxpgxgzmjsr6lttp0fpl3r4nq9xyvg2rsn2e9f1 #(string | null) The address of the contract was executed.
+          #       sender: aura1el26ynpghudec6rh8krnxpgxgzmjsr6lttp0fpl3r4nq9xyvg2rsn2e9f1 #(string | null) The address of the sender.
+        # - handler: handleEvents
+        #   type: event
+        #   filter:
+        #     - type: coin_received #([string] | null) Filter event by type.
+          #     attributes: # A set of key/value pairs that are present in the event data.
+          #       key: receiver #(string | null) Filter event by attributes key.
+          #       value: aura1el26ynpghudec6rh8krnxpgxgzmjsr6lttp0fpl3r4nq9xyvg2rsn2e9f1 #(string | null) Filter event by attributes value.
+          #   - type: coin_spent
+          #     source: BEGIN_BLOCK_EVENT #BEGIN_BLOCK_EVENT | END_BLOCK_EVENT | TX_EVENT.
+          #     attributes:
+          #       key: spender
+          #       value: aura1m3h30wlvsf8llruxtpukdvsy0km2kum8n8s69e

@@ -1,0 +1,81 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../src/generated/client"
+}
+
+// generator typegraphql {
+//   provider = "typegraphql-prisma"
+//   output   = "../node_modules/@generated/typegraphql-prisma"
+// }
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+model Block {
+  id         Int      @id @default(autoincrement())
+  height     Int
+  time       DateTime
+  hash       String
+  num_txs    Int
+  proposer   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Transaction {
+  id         Int      @id @default(autoincrement())
+  height     Int
+  hash       String
+  from       String
+  to         String
+  time       DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Event {
+  id         Int      @id @default(autoincrement())
+  height     Int
+  tx_hash    String
+  type       String
+  source    String
+  attributes String
+  time       DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  height     Int
+  tx_hash    String
+  type       String
+  sender     String
+  content    String
+  index      Int
+  time       DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model BlockCheckpoint {
+  id         Int      @id @default(autoincrement())
+  height     Int
+  job_name   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Account {
+  id         Int      @id @default(autoincrement())
+  address    String
+  amount     BigInt
+}
