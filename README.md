@@ -10,6 +10,10 @@ git clone https://github.com/aura-nw/horoscope-track-node.git
 cd horoscope-track-node
 git checkout 4c2ff5398f41e7c0d33c75435c62522170e63cdc
 
+# or use horoscope-cli
+npm install @aura-nw/horoscope-cli
+horoscope-cli init
+
 # install package node
 npm install
 
