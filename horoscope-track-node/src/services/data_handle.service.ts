@@ -112,6 +112,11 @@ export class DataHandleService {
       'POST',
     );
 
+    const wrappedBlock = responseBlocks.map((block) => {
+      return this.wrapBlock(block);
+    });
+
+
     // insert data with transaction
     await prisma.$transaction(async (trx) => {
       for (const block of responseBlocks) {
@@ -206,5 +211,16 @@ export class DataHandleService {
     if (checkFilter) {
       HandleTypeMap[kind](data, trx);
     }
+  }
+
+  wrapBlock(block: IBlockResponse) {
+    block.txs.forEach((tx) => {
+      tx.block = block;
+      tx.messages.forEach((message) => {
+        message.transaction = tx;
+        message.block = block;
+      });
+    });
+    return block;
   }
 }

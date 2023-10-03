@@ -1,3 +1,4 @@
+import { IBlockResponse } from './block_response';
 import { IEventResponse } from './event_response';
 import { IMessageResponse } from './message_response';
 
@@ -10,4 +11,6 @@ export interface ITransactionResponse {
   index: number;
   messages: IMessageResponse[];
   events: IEventResponse[];
+  // relation
+  block: IBlockResponse;
 }

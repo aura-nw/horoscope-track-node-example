@@ -1,4 +1,7 @@
 import { IAttributeResponse } from './attribute_response';
+import { IBlockResponse } from './block_response';
+import { IMessageResponse } from './message_response';
+import { ITransactionResponse } from './transaction_response';
 
 export enum EventSource {
   BEGIN_BLOCK_EVENT = 'BEGIN_BLOCK_EVENT',
@@ -11,4 +14,9 @@ export interface IEventResponse {
   source: EventSource;
   tx_msg_index?: number | null;
   attributes: IAttributeResponse[];
+
+  // relation
+  block?: IBlockResponse;
+  transaction?: ITransactionResponse;
+  message?: IMessageResponse;
 }
