@@ -55,23 +55,29 @@ export async function handleMessages(
   trx: any,
 ): Promise<void> {
   console.log('catched message:');
-  console.log(JSON.stringify(msg));
+  // console.log(JSON.stringify(msg));
 
-  // get sender, amount aura swapped
   const sender = msg.sender;
   const funds: any[] = msg.content.funds;
+  let time = new Date();
+  if (msg.block?.time) {
+    time = new Date(msg.block?.time);
+  }
+  time.setHours(0, 0, 0, 0);
   const amountAura = funds.find((x: any) => x.denom === 'uaura').amount;
-
-  // find account in db
   const accountInDB = await prisma.account.findFirst({
     where: {
       address: sender,
+      time: {
+        equals: time,
+      },
     },
   });
-  // if account is existed, update amount aura, if not then create new 
   if (!accountInDB) {
     const resultInsert = await prisma.account.create({
-      data: { address: sender, amount: amountAura },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      data: { address: sender, amount: amountAura, time: time },
     });
     console.log('result insert: ', resultInsert.id);
   } else {
