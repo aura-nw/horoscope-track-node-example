@@ -30,6 +30,7 @@ model Account {
   id         Int      @id @default(autoincrement())
   address    String
   amount     BigInt
+  time       DateTime
 }
 ```
 
